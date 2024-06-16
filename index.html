@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StormLuar</title>
+    <script src="blockly_compressed.js"></script> <!-- ライブラリを読み込む -->
+    <script src="blocks_compressed.js"></script> <!-- ライブラリを読み込む -->
+    <script src="ja.js"></script>
+
+</head>
+
+<body>
+    <div id="blocklyDiv" style="height: 35em; width: 90em;"></div>
+    <textarea id="generate" placeholder="生成コード"
+        style="position: relative; left: 25%; font-weight: bolder; height: 6em; outline: none; resize: none; border: 0.2em solid rgb(255, 128, 0); border-radius: 0.5em; width: 50em; margin-top: 0.5em;"></textarea>
+    <xml id="toolbox" style="display: none">
+        <sep></sep>
+        <category name="比較処理" colour="#ff4500">
+            <block type="controls_if"></block>
+            <block type="logic_compare">
+                <field name="OP">EQ</field>
+            </block>
+            <block type="logic_operation">
+                <field name="OP">AND</field>
+            </block>
+            <block type="logic_negate"></block>
+            <block type="logic_boolean">
+                <field name="BOOL">TRUE</field>
+            </block>
+            <block type="logic_null"></block>
+        </category>
+        <category name="ループ処理" colour="#ff6347">
+            <block type="controls_repeat_ext">
+                <value name="TIMES">
+                    <shadow type="math_number">
+                        <field name="NUM">5</field>
+                    </shadow>
+                </value>
+            </block>
+            <block type="controls_whileUntil">
+                <field name="MODE">WHILE</field>
+            </block>
+            <block type="controls_for">
+                <field name="VAR" id="7g!d%EtW`|x7PA|AjIz7">i</field>
+                <value name="FROM">
+                    <shadow type="math_number">
+                        <field name="NUM">1</field>
+                    </shadow>
+                </value>
+                <value name="TO">
+                    <shadow type="math_number">
+                        <field name="NUM">10</field>
+                    </shadow>
+                </value>
+                <value name="BY">
+                    <shadow type="math_number">
+                        <field name="NUM">1</field>
+                    </shadow>
+                </value>
+            </block>
+            <block type="controls_flow_statements" disabled="true">
+                <field name="FLOW">BREAK</field>
+            </block>
+        </category>
+        <category name="計算処理" colour="#4169e1">
+            <block type="math_number">
+                <field name="NUM">0</field>
+            </block>
+            <block type="math_arithmetic">
+                <field name="OP">ADD</field>
+                <value name="A">
+                    <shadow type="math_number">
+                        <field name="NUM">1</field>
+                    </shadow>
+                </value>
+                <value name="B">
+                    <shadow type="math_number">
+                        <field name="NUM">1</field>
+                    </shadow>
+                </value>
+            </block>
+            <block type="math_single">
+                <field name="OP">ROOT</field>
+                <value name="NUM">
+                    <shadow type="math_number">
+                        <field name="NUM">9</field>
+                    </shadow>
+                </value>
+            </block>
+            <block type="math_trig">
+                <field name="OP">SIN</field>
+                <value name="NUM">
+                    <shadow type="math_number">
+                        <field name="NUM">45</field>
+                    </shadow>
+                </value>
+            </block>
+            <block type="math_constant">
+                <field name="CONSTANT">PI</field>
+            </block>
+            <block type="math_number_property">
+                <mutation divisor_input="false"></mutation>
+                <field name="PROPERTY">EVEN</field>
+                <value name="NUMBER_TO_CHECK">
+                    <shadow type="math_number">
+                        <field name="NUM">0</field>
+                    </shadow>
+                </value>
+            </block>
+            <block type="math_round">
+                <field name="OP">ROUND</field>
+                <value name="NUM">
+                    <shadow type="math_number">
+                        <field name="NUM">3.1</field>
+                    </shadow>
+                </value>
+            </block>
+            <block type="math_on_list">
+                <mutation op="SUM"></mutation>
+                <field name="OP">SUM</field>
+            </block>
+            <block type="math_modulo">
+                <value name="DIVIDEND">
+                    <shadow type="math_number">
+                        <field name="NUM">64</field>
+                    </shadow>
+                </value>
+                <value name="DIVISOR">
+                    <shadow type="math_number">
+                        <field name="NUM">10</field>
+                    </shadow>
+                </value>
+            </block>
+            <block type="math_constrain">
+                <value name="VALUE">
+                    <shadow type="math_number">
+                        <field name="NUM">50</field>
+                    </shadow>
+                </value>
+                <value name="LOW">
+                    <shadow type="math_number">
+                        <field name="NUM">1</field>
+                    </shadow>
+                </value>
+                <value name="HIGH">
+                    <shadow type="math_number">
+                        <field name="NUM">100</field>
+                    </shadow>
+                </value>
+            </block>
+            <block type="math_random_int">
+                <value name="FROM">
+                    <shadow type="math_number">
+                        <field name="NUM">1</field>
+                    </shadow>
+                </value>
+                <value name="TO">
+                    <shadow type="math_number">
+                        <field name="NUM">100</field>
+                    </shadow>
+                </value>
+            </block>
+            <block type="math_random_float"></block>
+        </category>
+        <category name="文字列" colour="#00ff7f">
+            <block type="text">
+                <field name="TEXT"></field>
+            </block>
+            <block type="text_join">
+                <mutation items="2"></mutation>
+            </block>
+            <block type="text_append">
+                <field name="VAR" id="@Xq*6r^t}I=G%h[#(Pi=">item</field>
+                <value name="TEXT">
+                    <shadow type="text">
+                        <field name="TEXT"></field>
+                    </shadow>
+                </value>
+            </block>
+            <block type="text_length">
+                <value name="VALUE">
+                    <shadow type="text">
+                        <field name="TEXT">abc</field>
+                    </shadow>
+                </value>
+            </block>
+            <block type="text_isEmpty">
+                <value name="VALUE">
+                    <shadow type="text">
+                        <field name="TEXT"></field>
+                    </shadow>
+                </value>
+            </block>
+            <block type="text_indexOf">
+                <field name="END">FIRST</field>
+                <value name="VALUE">
+                    <block type="variables_get">
+                        <field name="VAR" id="HE0;9Pa@72J|Q1Iyb[a5">text</field>
+                    </block>
+                </value>
+                <value name="FIND">
+                    <shadow type="text">
+                        <field name="TEXT">abc</field>
+                    </shadow>
+                </value>
+            </block>
+            <block type="text_charAt">
+                <mutation at="true"></mutation>
+                <field name="WHERE">FROM_START</field>
+                <value name="VALUE">
+                    <block type="variables_get">
+                        <field name="VAR" id="HE0;9Pa@72J|Q1Iyb[a5">text</field>
+                    </block>
+                </value>
+            </block>
+            <block type="text_getSubstring">
+                <mutation at1="true" at2="true"></mutation>
+                <field name="WHERE1">FROM_START</field>
+                <field name="WHERE2">FROM_START</field>
+                <value name="STRING">
+                    <block type="variables_get">
+                        <field name="VAR" id="HE0;9Pa@72J|Q1Iyb[a5">text</field>
+                    </block>
+                </value>
+            </block>
+            <block type="text_changeCase">
+                <field name="CASE">UPPERCASE</field>
+                <value name="TEXT">
+                    <shadow type="text">
+                        <field name="TEXT">abc</field>
+                    </shadow>
+                </value>
+            </block>
+            <block type="text_trim">
+                <field name="MODE">BOTH</field>
+                <value name="TEXT">
+                    <shadow type="text">
+                        <field name="TEXT">abc</field>
+                    </shadow>
+                </value>
+            </block>
+            <block type="text_print">
+                <value name="TEXT">
+                    <shadow type="text">
+                        <field name="TEXT">abc</field>
+                    </shadow>
+                </value>
+            </block>
+            <block type="text_prompt_ext">
+                <mutation type="TEXT"></mutation>
+                <field name="TYPE">TEXT</field>
+                <value name="TEXT">
+                    <shadow type="text">
+                        <field name="TEXT">abc</field>
+                    </shadow>
+                </value>
+            </block>
+        </category>
+        <category name="テーブル(リスト)" colour="#ffd700">
+            <block type="lists_create_with">
+                <mutation items="0"></mutation>
+            </block>
+            <block type="lists_create_with">
+                <mutation items="3"></mutation>
+            </block>
+            <block type="lists_repeat">
+                <value name="NUM">
+                    <shadow type="math_number">
+                        <field name="NUM">5</field>
+                    </shadow>
+                </value>
+            </block>
+            <block type="lists_length"></block>
+            <block type="lists_isEmpty"></block>
+            <block type="lists_indexOf">
+                <field name="END">FIRST</field>
+                <value name="VALUE">
+                    <block type="variables_get">
+                        <field name="VAR" id="f)RG]XHic+Rj%G@|ku*2">list</field>
+                    </block>
+                </value>
+            </block>
+            <block type="lists_getIndex">
+                <mutation statement="false" at="true"></mutation>
+                <field name="MODE">GET</field>
+                <field name="WHERE">FROM_START</field>
+                <value name="VALUE">
+                    <block type="variables_get">
+                        <field name="VAR" id="f)RG]XHic+Rj%G@|ku*2">list</field>
+                    </block>
+                </value>
+            </block>
+            <block type="lists_setIndex">
+                <mutation at="true"></mutation>
+                <field name="MODE">SET</field>
+                <field name="WHERE">FROM_START</field>
+                <value name="LIST">
+                    <block type="variables_get">
+                        <field name="VAR" id="f)RG]XHic+Rj%G@|ku*2">list</field>
+                    </block>
+                </value>
+            </block>
+            <block type="lists_getSublist">
+                <mutation at1="true" at2="true"></mutation>
+                <field name="WHERE1">FROM_START</field>
+                <field name="WHERE2">FROM_START</field>
+                <value name="LIST">
+                    <block type="variables_get">
+                        <field name="VAR" id="f)RG]XHic+Rj%G@|ku*2">list</field>
+                    </block>
+                </value>
+            </block>
+            <block type="lists_split">
+                <mutation mode="SPLIT"></mutation>
+                <field name="MODE">SPLIT</field>
+                <value name="DELIM">
+                    <shadow type="text">
+                        <field name="TEXT">,</field>
+                    </shadow>
+                </value>
+            </block>
+            <block type="lists_sort">
+                <field name="TYPE">NUMERIC</field>
+                <field name="DIRECTION">1</field>
+            </block>
+        </category>
+        <category name="変数" colour="#ff8c00" custom="VARIABLE"></category> <!-- ブロックサンプルを用意 -->
+        <sep></sep>
+        <category name="ストワ-一般" colour="#00bfff">
+            <block type="input"></block>
+            <block type="output"></block>
+        </category>
+        <category name="ストワ-イベント" colour="#d2691e">
+            <block type="ontick"></block>
+            <block type="ondraw"></block>
+        </category>
+        <category name="ストワ-イベント引数" colour="#8b4513">
+            <block type="tick"></block>
+            <block type="touch1"></block>
+            <block type="touch2"></block>
+            <block type="touch-x"></block>
+        </category>
+        <category name="ストワ-描画" colour="#dc143c">
+            <block type="getWidth"></block>
+            <block type="getHeight"></block>
+            <block type="paint_en"></block>
+            <block type="setcolor"></block>
+        </category>
+
+    </xml>
+    <script src="lua_compressed.js"></script>
+    <script>
+        var workspace = Blockly.inject('blocklyDiv',                                                  // ライブラリに読み込ませる
+            { renderer: 'Zelos', toolbox: document.getElementById('toolbox') });
+        Blockly.Blocks['input'] = {
+            init: function () {
+                this.appendValueInput("InputNumber")
+                    .setCheck("Number");
+                this.appendDummyInput()
+                    .appendField("番の")
+                    .appendField(new Blockly.FieldDropdown([["Number", "getNumber"], ["Bool", "getBool"]]), "InputType")
+                    .appendField("入力の取得");
+                this.setOutput(true, null);
+                this.setColour(225);
+                this.setTooltip("");
+                this.setHelpUrl("");
+            }
+        };
+        Blockly.Blocks['output'] = {
+            init: function () {
+                this.appendValueInput("OutputNumber")
+                    .setCheck("Number");
+                this.appendDummyInput()
+                    .appendField("番の")
+                    .appendField(new Blockly.FieldDropdown([["Number", "Select Number"], ["Bool", "Select Bool"]]), "OutputType")
+                    .appendField("出力に");
+                this.appendValueInput("OutputValue")
+                    .setCheck(["Number", "Boolean"]);
+                this.appendDummyInput()
+                    .appendField("を出力する");
+                this.setPreviousStatement(true, null);
+                this.setNextStatement(true, null);
+                this.setColour(165);
+                this.setTooltip("");
+                this.setHelpUrl("");
+            }
+        };
+        Blockly.Blocks['tick'] = {
+            init: function () {
+                this.appendDummyInput()
+                    .appendField("経過ティック");
+                this.setOutput(true, null);
+                this.setColour(195);
+                this.setTooltip("Ontick内でのみ使用できます。それ以外で使用するとエラーが発生します。");
+                this.setHelpUrl("");
+            }
+        };
+        Blockly.Blocks['touch1'] = {
+            init: function () {
+                this.appendDummyInput()
+                    .appendField("タッチ1");
+                this.setOutput(true, null);
+                this.setColour(195);
+                this.setTooltip("タッチイベント内でのみ使用できます。それ以外で使用するとエラーが発生します。");
+                this.setHelpUrl("");
+            }
+        };
+        Blockly.Blocks['touch2'] = {
+            init: function () {
+                this.appendDummyInput()
+                    .appendField("タッチ2");
+                this.setOutput(true, null);
+                this.setColour(195);
+                this.setTooltip("タッチイベント内でのみ使用できます。それ以外で使用するとエラーが発生します。");
+                this.setHelpUrl("");
+            }
+        };
+        Blockly.Blocks['touch-x'] = {
+            init: function () {
+                this.appendDummyInput()
+                    .appendField("タッチ1のX");
+                this.setOutput(true, null);
+                this.setColour(195);
+                this.setTooltip("タッチイベント内でのみ使用できます。それ以外で使用するとエラーが発生します。");
+                this.setHelpUrl("");
+            }
+        };
+        Blockly.Blocks['bool'] = {
+            init: function () {
+                this.appendDummyInput()
+                    .appendField("ブール値")
+                    .appendField(new Blockly.FieldDropdown([["False", "False"], ["True", "True"]]), "Bool");
+                this.setOutput(true, null);
+                this.setColour(225);
+                this.setTooltip("ブール値");
+                this.setHelpUrl("");
+            }
+        };
+        Blockly.Blocks['math_floor'] = {
+            init: function () {
+                this.appendValueInput("Value")
+                    .setCheck("Number");
+                this.appendDummyInput()
+                    .appendField("の小数点を切り捨てる");
+                this.setOutput(true, null);
+                this.setColour(225);
+                this.setTooltip("");
+                this.setHelpUrl("");
+            }
+        };
+        Blockly.Blocks['paint_en'] = {
+            init: function () {
+
+                this.appendValueInput("X1")
+                    .setCheck("Number");
+                this.appendDummyInput();
+                this.appendValueInput("Y1")
+                    .setCheck("Number");
+                this.appendDummyInput()
+                    .appendField("から");
+                this.appendValueInput("X2")
+                    .setCheck("Number");
+                this.appendDummyInput();
+                this.appendValueInput("Y2")
+                    .setCheck("Number");
+                this.appendDummyInput()
+                    .appendField("に円を描く");
+                this.setInputsInline(true);
+                this.setPreviousStatement(true, null);
+                this.setNextStatement(true, null);
+                this.setColour(165);
+                this.setTooltip("");
+                this.setHelpUrl("");
+            }
+        };
+        Blockly.Blocks['setcolor'] = {
+            init: function () {
+                this.appendValueInput("R")
+                    .setCheck("Number")
+                    .appendField("R:");
+                this.appendValueInput("G")
+                    .setCheck("Number")
+                    .appendField("G:");
+                this.appendValueInput("B")
+                    .setCheck("Number")
+                    .appendField("B:");
+                this.appendDummyInput()
+                    .appendField("で色を設定する");
+                this.setInputsInline(true);
+                this.setNextStatement(true, null);
+                this.setColour(165);
+                this.setTooltip("ディスプレイ上の色を変更します");
+                this.setHelpUrl("");
+            }
+        };
+        Blockly.Blocks['getWidth'] = {
+            init: function () {
+                this.appendDummyInput()
+                    .appendField("横幅を取得");
+                this.setInputsInline(true);
+                this.setOutput(true, null);
+                this.setColour(225);
+                this.setTooltip("ディスプレイ上の横幅(px)を取得します");
+                this.setHelpUrl("");
+            }
+        };
+        Blockly.Blocks['getHeight'] = {
+            init: function () {
+                this.appendDummyInput()
+                    .appendField("縦幅を取得");
+                this.setOutput(true, null);
+                this.setColour(225);
+                this.setTooltip("ディスプレイ上の縦幅(px)を取得します");
+                this.setHelpUrl("");
+            }
+        };
+        /*
+|||            |===== \        /   |=====   |\    |    ---------
+|||            |       \      /    |        | \   |        |
+||             |=====   \    /     |=====   |  \  |        |
+|||            |         \  /      |        |   \ |        |
+|||            |=====     \/       |=====   |    \|        | 
+        */
+        Blockly.Blocks['ontick'] = {
+            init: function () {
+                this.appendDummyInput()
+                    .appendField("常時実行");
+                this.setInputsInline(true);
+                this.setNextStatement(true, null);
+                this.setColour(0);
+                this.setTooltip("下に接続したブロックを常時実行します。");
+                this.setHelpUrl("https://github.com/YukkuriAkina/StormLuar/wiki/%E3%83%96%E3%83%AD%E3%83%83%E3%82%AF-%7C-Block#:~:text=%E8%B5%B7%E5%8B%95%E3%81%97%E3%81%BE%E3%81%99%E3%80%82-,%E5%B8%B8%E6%99%82%E5%AE%9F%E8%A1%8C,-%E8%AA%AC%E6%98%8E%3A%E4%B8%8B");
+            }
+        };
+        Blockly.Blocks['ondraw'] = {
+            init: function () {
+                this.appendDummyInput()
+                    .appendField("常時描画");
+                this.setInputsInline(true);
+                this.setNextStatement(true, null);
+                this.setColour(0);
+                this.setTooltip("下に接続したブロックを常時描画します。");
+                this.setHelpUrl("");
+            }
+        };
+        lua.luaGenerator.forBlock['input'] = function (block, generator) {
+            var value_inputnumber = generator.valueToCode(block, 'InputNumber', lua.Order.ATOMIC);
+            var dropdown_inputtype = block.getFieldValue('InputType');
+            // TODO: Assemble lua into code variable.
+            console.log(dropdown_inputtype)
+            var code = 'input.' + dropdown_inputtype + '(' + value_inputnumber + ')';
+            // TODO: Change ORDER_NONE to the correct strength.
+            return code;
+        };
+
+
+        lua.luaGenerator.forBlock['output'] = function (block, generator) {
+            var value_outputnumber = Blockly.Lua.valueToCode(block, 'OutputNumber', lua.Order.ATOMIC);
+            var dropdown_outputtype = block.getFieldValue('OutputType');
+            var value_outputvalue = generator.valueToCode(block, 'OutputValue', lua.Order.ATOMIC);
+            // TODO: Assemble lua into code variable.
+            var code = 'output.set' + dropdown_outputtype + '(' + value_outputnumber + ',' + value_outputvalue + ')';
+            return code;
+        };
+        lua.luaGenerator.forBlock['paint_en'] = function (block, generator) {
+            var value_x1 = generator.valueToCode(block, 'X1', lua.Order.ATOMIC);
+            var value_y1 = generator.valueToCode(block, 'Y1', lua.Order.ATOMIC);
+            var value_x2 = generator.valueToCode(block, 'X2', lua.Order.ATOMIC);
+            var value_y2 = generator.valueToCode(block, 'Y2', lua.Order.ATOMIC);
+            // TODO: Assemble lua into code variable.
+            var code = '...\n';
+            return code;
+
+        };
+        lua.luaGenerator.forBlock['getWidth'] = function (block, generator) {
+            // TODO: Assemble lua into code variable.
+            var code = 'screen.getWidth()';
+            // TODO: Change ORDER_NONE to the correct strength.
+            return code;
+        };
+        lua.luaGenerator.forBlock['getHeight'] = function (block, generator) {
+            // TODO: Assemble lua into code variable.
+            var code = 'screen.getHeight()';
+            // TODO: Change ORDER_NONE to the correct strength.
+            return code;
+        };
+        /*
+        |||            |===== \        /   |=====   |\    |    ---------
+        |||            |       \      /    |        | \   |        |
+        ||             |=====   \    /     |=====   |  \  |        |
+        |||            |         \  /      |        |   \ |        |
+        |||            |=====     \/       |=====   |    \|        | 
+        */
+        lua.luaGenerator.forBlock['ontick'] = function (block, generator) {
+            // TODO: Assemble lua into code variable.
+            var code = 'function onTick()\n';
+            return code;
+        };
+        lua.luaGenerator.forBlock['ondraw'] = function (block, generator) {
+            // TODO: Assemble lua into code variable.
+            var code = 'function onDraw()\n';
+            return code;
+        };
+        // 一般コード
+        document.title = "StormLuar Alpha1.0"
+        window.addEventListener('beforeunload', function (event) {
+            event.preventDefault() // (1)
+            event.returnValue = '' // (2)
+        })
+
+        setInterval(function () {
+            const code = lua.luaGenerator.workspaceToCode(workspace);
+            document.getElementById('generate').value = code
+        }, 100)
+    </script>
+</body>
+
+</html>
