@@ -331,16 +331,24 @@
         <category name="ストワ-一般" colour="#00bfff">
             <block type="input"></block>
             <block type="output"></block>
+            <block type="httprequest"></block>
         </category>
         <category name="ストワ-イベント" colour="#d2691e">
             <block type="ontick"></block>
             <block type="ondraw"></block>
+            <block type="httprequestevent"></block>
         </category>
         <category name="ストワ-イベント引数" colour="#8b4513">
             <block type="tick"></block>
+            <block type="port"></block>
+            <block type="request_body"></block>
+            <block type="response_body"></block>
             <block type="touch1"></block>
             <block type="touch2"></block>
-            <block type="touch-x"></block>
+            <block type="touch1-x"></block>
+            <block type="touch1-y"></block>
+            <block type="touch2-x"></block>
+            <block type="touch2-y"></block>
         </category>
         <category name="ストワ-描画" colour="#dc143c">
             <block type="getWidth"></block>
@@ -417,10 +425,40 @@
                 this.setHelpUrl("");
             }
         };
-        Blockly.Blocks['touch-x'] = {
+        Blockly.Blocks['touch1-x'] = {
             init: function () {
                 this.appendDummyInput()
                     .appendField("タッチ1のX");
+                this.setOutput(true, null);
+                this.setColour(195);
+                this.setTooltip("タッチイベント内でのみ使用できます。それ以外で使用するとエラーが発生します。");
+                this.setHelpUrl("");
+            }
+        };
+        Blockly.Blocks['touch1-y'] = {
+            init: function () {
+                this.appendDummyInput()
+                    .appendField("タッチ1のY");
+                this.setOutput(true, null);
+                this.setColour(195);
+                this.setTooltip("タッチイベント内でのみ使用できます。それ以外で使用するとエラーが発生します。");
+                this.setHelpUrl("");
+            }
+        };
+        Blockly.Blocks['touch2-x'] = {
+            init: function () {
+                this.appendDummyInput()
+                    .appendField("タッチ2のX");
+                this.setOutput(true, null);
+                this.setColour(195);
+                this.setTooltip("タッチイベント内でのみ使用できます。それ以外で使用するとエラーが発生します。");
+                this.setHelpUrl("");
+            }
+        };
+        Blockly.Blocks['touch2-y'] = {
+            init: function () {
+                this.appendDummyInput()
+                    .appendField("タッチ2のY");
                 this.setOutput(true, null);
                 this.setColour(195);
                 this.setTooltip("タッチイベント内でのみ使用できます。それ以外で使用するとエラーが発生します。");
@@ -489,6 +527,7 @@
                 this.appendDummyInput()
                     .appendField("で色を設定する");
                 this.setInputsInline(true);
+                this.setPreviousStatement(true, null);
                 this.setNextStatement(true, null);
                 this.setColour(165);
                 this.setTooltip("ディスプレイ上の色を変更します");
@@ -516,6 +555,57 @@
                 this.setHelpUrl("");
             }
         };
+        Blockly.Blocks['port'] = {
+            init: function () {
+                this.appendDummyInput()
+                    .appendField("ポートを取得");
+                this.setInputsInline(true);
+                this.setOutput(true, null);
+                this.setColour(195);
+                this.setTooltip("Httpリクエストのポートを取得します。");
+                this.setHelpUrl("");
+            }
+        };
+        Blockly.Blocks['request_body'] = {
+            init: function () {
+                this.appendDummyInput()
+                    .appendField("リクエストを取得");
+                this.setInputsInline(true);
+                this.setOutput(true, null);
+                this.setColour(195);
+                this.setTooltip("Httpリクエストのリクエスト内容を取得します。");
+                this.setHelpUrl("");
+            }
+        };
+        Blockly.Blocks['response_body'] = {
+            init: function () {
+                this.appendDummyInput()
+                    .appendField("レスポンスを取得");
+                this.setInputsInline(true);
+                this.setOutput(true, null);
+                this.setColour(195);
+                this.setTooltip("Httpリクエストのレスポンスを取得します。");
+                this.setHelpUrl("");
+            }
+        };
+        Blockly.Blocks['httprequest'] = {
+            init: function () {
+                this.appendValueInput("port")
+                    .setCheck(null)
+                    .appendField("ポート:");
+                this.appendValueInput("Addres")
+                    .setCheck(null)
+                    .appendField("アドレス:");
+                this.appendDummyInput()
+                    .appendField("でHTTP Getリクエストを送信する");
+                this.setInputsInline(true);
+                this.setPreviousStatement(true, null);
+                this.setNextStatement(true, null);
+                this.setColour(165);
+                this.setTooltip("HTTPリクエストを送信します");
+                this.setHelpUrl("");
+            }
+        };
         /*
 |||            |===== \        /   |=====   |\    |    ---------
 |||            |       \      /    |        | \   |        |
@@ -523,6 +613,17 @@
 |||            |         \  /      |        |   \ |        |
 |||            |=====     \/       |=====   |    \|        | 
         */
+        Blockly.Blocks['httprequestevent'] = {
+            init: function () {
+                this.appendDummyInput()
+                    .appendField("Httpリクエストの返答が来たら");
+                this.setInputsInline(true);
+                this.setNextStatement(true, null);
+                this.setColour(0);
+                this.setTooltip("Httpリクエストの返答が来たら下に続くブロックを起動します");
+                this.setHelpUrl("");
+            }
+        };
         Blockly.Blocks['ontick'] = {
             init: function () {
                 this.appendDummyInput()
@@ -544,6 +645,50 @@
                 this.setTooltip("下に接続したブロックを常時描画します。");
                 this.setHelpUrl("");
             }
+        };
+        lua.luaGenerator.forBlock['port'] = function (block, generator) {
+            // TODO: Assemble lua into code variable.
+            var code = 'port';
+            // TODO: Change ORDER_NONE to the correct strength.
+            return code;
+        };
+        lua.luaGenerator.forBlock['request_body'] = function (block, generator) {
+            // TODO: Assemble lua into code variable.
+            var code = 'request_body';
+            // TODO: Change ORDER_NONE to the correct strength.
+            return code;
+        };
+        lua.luaGenerator.forBlock['response_body'] = function (block, generator) {
+            // TODO: Assemble lua into code variable.
+            var code = 'response_body';
+            // TODO: Change ORDER_NONE to the correct strength.
+            return code;
+        };
+        lua.luaGenerator.forBlock['touch1'] = function (block, generator) {
+            // TODO: Assemble lua into code variable.
+            var code = 'input.getBool(1)';
+            // TODO: Change ORDER_NONE to the correct strength.
+            return code;
+        };
+        lua.luaGenerator.forBlock['touch2'] = function (block, generator) {
+            // TODO: Assemble lua into code variable.
+            var code = '//input.getBool(2)';
+            // TODO: Change ORDER_NONE to the correct strength.
+            return code;
+        };
+        lua.luaGenerator.forBlock['touch1-X'] = function (block, generator) {
+            // TODO: Assemble lua into code variable.
+            var code = 'response_body';
+            // TODO: Change ORDER_NONE to the correct strength.
+            return code;
+        };
+        lua.luaGenerator.forBlock['httprequest'] = function (block, generator) {
+            var value_port = generator.valueToCode(block, 'port', lua.Order.ATOMIC);
+            var value_addres = generator.valueToCode(block, 'Addres', lua.Order.ATOMIC);
+            // TODO: Assemble lua into code variable.
+            var code = 'async.httpGet(' + value_port + ',' + value_addres + ')';
+            // TODO: Change ORDER_NONE to the correct strength.
+            return code;
         };
         lua.luaGenerator.forBlock['input'] = function (block, generator) {
             var value_inputnumber = generator.valueToCode(block, 'InputNumber', lua.Order.ATOMIC);
@@ -593,6 +738,11 @@
         |||            |         \  /      |        |   \ |        |
         |||            |=====     \/       |=====   |    \|        | 
         */
+        lua.luaGenerator.forBlock['httprequestevent'] = function (block, generator) {
+            // TODO: Assemble lua into code variable.
+            var code = 'function httpReply(port, request_body, response_body)\n';
+            return code;
+        };
         lua.luaGenerator.forBlock['ontick'] = function (block, generator) {
             // TODO: Assemble lua into code variable.
             var code = 'function onTick()\n';
